@@ -1,0 +1,1126 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Нагодуй Мацура - магазин картинок с мацурами</title>
+  <style>
+    :root {
+      --ink: #1d2027;
+      --muted: #676d7a;
+      --paper: #fffaf2;
+      --panel: #ffffff;
+      --mint: #9ee6d1;
+      --coral: #ff8b73;
+      --sun: #ffd166;
+      --blue: #5aa9e6;
+      --line: rgba(29, 32, 39, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 209, 102, 0.32), transparent 28%),
+        radial-gradient(circle at 85% 8%, rgba(158, 230, 209, 0.35), transparent 26%),
+        linear-gradient(180deg, #fffaf2 0%, #f6fbff 100%);
+      min-height: 100vh;
+    }
+
+    body.gate-open {
+      overflow: hidden;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px clamp(18px, 4vw, 56px);
+      background: rgba(255, 250, 242, 0.82);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: var(--ink);
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .cart {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: white;
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .cart-count {
+      display: grid;
+      place-items: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: white;
+      font-size: 13px;
+    }
+
+    .gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(29, 32, 39, 0.58);
+      backdrop-filter: blur(10px);
+    }
+
+    .gate-overlay.hidden {
+      display: none;
+    }
+
+    .gate-panel {
+      width: min(520px, 100%);
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 28px 80px rgba(29, 32, 39, 0.2);
+      text-align: center;
+      animation: riseIn 220ms ease;
+    }
+
+    .gate-panel h2 {
+      font-size: clamp(28px, 5vw, 44px);
+    }
+
+    .gate-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .gate-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .gate-denied {
+      min-height: 22px;
+      color: var(--coral);
+      font-weight: 800;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 480px);
+      align-items: center;
+      gap: clamp(28px, 6vw, 82px);
+      padding: clamp(38px, 7vw, 82px) clamp(18px, 4vw, 56px) 34px;
+    }
+
+    .hero h1 {
+      max-width: 740px;
+      margin: 0 0 18px;
+      font-size: clamp(42px, 7vw, 86px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .keep-line {
+      white-space: nowrap;
+    }
+
+    .hero-note {
+      display: block;
+      font-size: 0.72em;
+    }
+
+    .hero p {
+      max-width: 580px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(29, 32, 39, 0.14);
+    }
+
+    .button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .hero-art {
+      position: relative;
+      aspect-ratio: 1;
+      min-height: 280px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(145deg, #ffffff, #e9f9f4);
+      overflow: hidden;
+      box-shadow: 0 28px 80px rgba(29, 32, 39, 0.12);
+    }
+
+    .deal-timer {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      font-weight: 800;
+    }
+
+    .deal-timer span {
+      color: var(--coral);
+      white-space: nowrap;
+    }
+
+    .hero-art img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .ribbon {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      right: 18px;
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--line);
+      font-weight: 800;
+    }
+
+    .ribbon span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ribbon .buy {
+      margin-top: 6px;
+      background: var(--ink);
+    }
+
+    .section {
+      padding: 30px clamp(18px, 4vw, 56px) 70px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0;
+    }
+
+    .section-title p {
+      max-width: 420px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .catalog-category {
+      display: grid;
+      gap: 14px;
+    }
+
+    .catalog-category + .catalog-category {
+      margin-top: 34px;
+    }
+
+    .category-title {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 30px);
+      letter-spacing: 0;
+    }
+
+    .product {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 14px 42px rgba(29, 32, 39, 0.08);
+    }
+
+    .picture {
+      position: relative;
+      display: grid;
+      place-items: center;
+      aspect-ratio: 4 / 3;
+      background: #f1f7fb;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .picture svg {
+      width: 86%;
+      height: 86%;
+    }
+
+    .picture img {
+      position: absolute;
+      inset: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      display: block;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .product-body {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .product p {
+      margin: 0;
+      min-height: 44px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .buy {
+      width: 100%;
+      min-height: 42px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--coral);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .buy:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(255, 139, 115, 0.28);
+    }
+
+    .buy:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .buy.added {
+      background: var(--ink);
+    }
+
+    body.cart-open {
+      overflow: hidden;
+    }
+
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      background: rgba(29, 32, 39, 0.38);
+      padding: 18px;
+    }
+
+    .cart-overlay.open {
+      display: grid;
+      place-items: center;
+      animation: fadeIn 180ms ease;
+    }
+
+    .cart-panel {
+      width: min(620px, 100%);
+      max-height: min(720px, calc(100vh - 36px));
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 30px 90px rgba(29, 32, 39, 0.22);
+      animation: riseIn 220ms ease;
+    }
+
+    .cart-head,
+    .cart-foot {
+      padding: 18px;
+      background: #fffaf2;
+    }
+
+    .cart-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cart-head h2 {
+      font-size: 28px;
+    }
+
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      color: var(--ink);
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .cart-items {
+      display: grid;
+      gap: 12px;
+      overflow: auto;
+      padding: 18px;
+    }
+
+    .cart-empty {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      margin: 0;
+      padding: 22px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .cart-empty img {
+      width: min(360px, 100%);
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #f1f7fb;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 74px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .cart-item img {
+      width: 74px;
+      height: 58px;
+      display: block;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #f1f7fb;
+    }
+
+    .cart-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .cart-item span {
+      color: var(--muted);
+    }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      gap: 8px;
+    }
+
+    .quantity button,
+    .remove-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffaf2;
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .quantity button {
+      width: 34px;
+      height: 34px;
+    }
+
+    .remove-item {
+      min-height: 34px;
+      min-width: 82px;
+      padding: 0 14px;
+      white-space: nowrap;
+    }
+
+    .cart-foot {
+      display: grid;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .cart-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .cart-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .feature {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .feature span {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    footer {
+      padding: 28px clamp(18px, 4vw, 56px);
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      background: white;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 820px) {
+      header {
+        flex-wrap: wrap;
+      }
+
+      nav {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .cart {
+        margin-left: auto;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .grid,
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .cart-item {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-item img {
+        width: 100%;
+        height: 150px;
+      }
+
+      .quantity {
+        justify-content: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="gate-overlay" id="entryGate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <div class="gate-panel">
+      <h2 id="gateTitle">ТИ ЛЮБИШ МАЦУРІВ?</h2>
+      <p>Вхід дозволено тільки тим, хто готовий нагодувати мацура.</p>
+      <div class="gate-actions">
+        <button class="button secondary" type="button" id="denyGate">нєт</button>
+        <button class="button" type="button" id="allowGate">АЙНО КАНЄШНО!!!</button>
+      </div>
+      <div class="gate-denied" id="gateDenied" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo"><img src="кот8.jpg" alt="Нагодуй Мацура"></div>
+      <span>Нагодуй Мацура</span>
+    </div>
+    <nav aria-label="Навигация">
+      <a href="#catalog">Каталог</a>
+      <a href="#why">Печать</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <button class="cart" type="button" id="openCart" aria-haspopup="dialog">
+      <span>Корзина</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>ЧОТКІ КАРТІНКИ ІЗ <span class="keep-line">МАЦУРАМИ</span><span class="hero-note">(почти NFT)</span></h1>
+        <p>Малинький магаз із самими чоткими мачатами у світі купи си ліпше мачку вмісто пива учини дащо полєзноє у своїв жизни.</p>
+        <div class="actions">
+          <a class="button" href="#catalog">Смотреть каталог</a>
+          <a class="button secondary" href="#why">Как это работает</a>
+        </div>
+      </div>
+      <div class="hero-art exclusive-offer" aria-label="Эксклюзивное фото кота" data-id="cat-7" data-title="ЕКСКЛЮЗИВ: Мацур на стрісі" data-price="0" data-priceless="true" data-image="кот7.jpg" data-limit="3">
+        <div class="deal-timer">
+          <strong>УСПІЙ ОСТАННІЙ ШАНС!</strong>
+          <span id="dealCountdown">24:00:00</span>
+        </div>
+        <img src="кот7.jpg" alt="Мацур на стрісі">
+        <div class="ribbon">
+          <strong>ЕКСКЛЮЗИВ: Мацур на стрісі</strong>
+          <span>Ліміт: 3 штуки</span>
+          <button class="buy" type="button">В корзину: ЕКСКЛЮЗИВ</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="catalog">
+      <div class="section-title">
+        <h2>Каталог</h2>
+      </div>
+
+      <div class="catalog-category">
+        <h3 class="category-title">Городські мацури</h3>
+        <div class="grid">
+          <article class="product" data-id="cat-1" data-title="Кот 1" data-price="10" data-image="кот1.jpg">
+            <div class="picture">
+              <img src="кот1.jpg" alt="Кот 1">
+            </div>
+            <div class="product-body">
+              <div class="meta"><span>Кот 1</span><span>10 грн</span></div>
+              <p>Малоє мачатко.</p>
+              <button class="buy" type="button">В корзину</button>
+            </div>
+          </article>
+
+          <article class="product" data-id="cat-2" data-title="Кот 2" data-price="50" data-image="кот2.jpg">
+            <div class="picture">
+              <img src="кот2.jpg" alt="Кот 2">
+            </div>
+            <div class="product-body">
+              <div class="meta"><span>Кот 2</span><span>50 грн</span></div>
+              <p>Блатна мачка.</p>
+              <button class="buy" type="button">В корзину</button>
+            </div>
+          </article>
+
+          <article class="product" data-id="cat-3" data-title="Кот 3" data-price="100" data-image="кот3.jpg">
+            <div class="picture">
+              <img src="кот3.jpg" alt="Кот 3">
+            </div>
+            <div class="product-body">
+              <div class="meta"><span>Кот 3</span><span>100 грн</span></div>
+              <p>Діловий мацур.</p>
+              <button class="buy" type="button">В корзину</button>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="catalog-category">
+        <h3 class="category-title">Мачата Софійки</h3>
+        <div class="grid">
+          <article class="product" data-id="cat-4" data-title="Кот 4" data-price="0" data-priceless="true" data-image="кот4.jpg">
+            <div class="picture">
+              <img src="кот4.jpg" alt="Кот 4">
+            </div>
+            <div class="product-body">
+              <div class="meta"><span>Кот 4</span><span>БЕЗЦІННО!!!</span></div>
+              <p>Ніжне мачатко Софійки для тихих ранків і теплих обіймів.</p>
+              <button class="buy" type="button">В корзину</button>
+            </div>
+          </article>
+
+          <article class="product" data-id="cat-5" data-title="Кот 5" data-price="0" data-priceless="true" data-image="кот5.jpg">
+            <div class="picture">
+              <img src="кот5.jpg" alt="Кот 5">
+            </div>
+            <div class="product-body">
+              <div class="meta"><span>Кот 5</span><span>БЕЗЦІННО!!!</span></div>
+              <p>Допитливе мачатко Софійки, яке уважно стежить за всім навколо.</p>
+              <button class="buy" type="button">В корзину</button>
+            </div>
+          </article>
+
+          <article class="product" data-id="cat-6" data-title="Кот 6" data-price="0" data-priceless="true" data-image="кот6.jpg">
+            <div class="picture">
+              <img src="кот6.jpg" alt="Кот 6">
+            </div>
+            <div class="product-body">
+              <div class="meta"><span>Кот 6</span><span>БЕЗЦІННО!!!</span></div>
+              <p>Сміливе мачатко Софійки з характером маленького начальника.</p>
+              <button class="buy" type="button">В корзину</button>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="features" id="why">
+        <div class="feature">
+          <strong>Моментальный файл</strong>
+          <span>После покупки можно скачать картинку и распечатать в любом удобном формате.</span>
+        </div>
+        <div class="feature">
+          <strong>Подарочный вид</strong>
+          <span>Каждая работа выглядит как маленький постер, а не как случайная картинка.</span>
+        </div>
+        <div class="feature">
+          <strong>Простая витрина</strong>
+          <span>Это демо-лендинг: кнопки и каталог уже выглядят как настоящий магазин.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="cart-overlay" id="cartOverlay" aria-hidden="true">
+    <section class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle">Корзина</h2>
+        <button class="icon-button" type="button" id="closeCart" aria-label="Закрыть корзину">×</button>
+      </div>
+      <div class="cart-items" id="cartItems">
+        <div class="cart-empty">
+          <span>Корзина пока пустая. Добавь понравившуюся картинку из каталога.</span>
+          <img src="собака1.jpg" alt="Собака рядом с пустой корзиной">
+        </div>
+      </div>
+      <div class="cart-foot">
+        <div class="cart-total">
+          <span>Итого</span>
+          <span id="cartTotal">0 грн</span>
+        </div>
+        <div class="cart-actions">
+          <button class="button" type="button" id="checkoutCart">Оформить заказ</button>
+          <button class="button secondary" type="button" id="clearCart">Очистить корзину</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer id="contacts">
+    Нагодуй Мацура, 2026. Демо интернет-магазина картинок с мацурами.
+  </footer>
+
+  <script>
+    const cart = new Map();
+    const cartCount = document.querySelector("#cartCount");
+    const cartTotal = document.querySelector("#cartTotal");
+    const cartItems = document.querySelector("#cartItems");
+    const cartOverlay = document.querySelector("#cartOverlay");
+    const openCartButton = document.querySelector("#openCart");
+    const closeCartButton = document.querySelector("#closeCart");
+    const clearCartButton = document.querySelector("#clearCart");
+    const checkoutCartButton = document.querySelector("#checkoutCart");
+    const dealCountdown = document.querySelector("#dealCountdown");
+    const entryGate = document.querySelector("#entryGate");
+    const allowGateButton = document.querySelector("#allowGate");
+    const denyGateButton = document.querySelector("#denyGate");
+    const gateDenied = document.querySelector("#gateDenied");
+    const currency = new Intl.NumberFormat("uk-UA", {
+      maximumFractionDigits: 0
+    });
+
+    function formatPrice(value) {
+      return `${currency.format(value)} грн`;
+    }
+
+    function formatItemPrice(item) {
+      if (item.priceless) return "БЕЗЦІННО!!!";
+      return `${formatPrice(item.price)} × ${item.quantity} = ${formatPrice(item.price * item.quantity)}`;
+    }
+
+    function formatTotal(totals) {
+      if (totals.sum > 0 && totals.hasPriceless) return `БЕЗЦІННО!!! + ${formatPrice(totals.sum)}`;
+      if (totals.hasPriceless) return "БЕЗЦІННО!!!";
+      return formatPrice(totals.sum);
+    }
+
+    function getTotals() {
+      return [...cart.values()].reduce((totals, item) => {
+        totals.count += item.quantity;
+        if (item.priceless) {
+          totals.hasPriceless = true;
+        } else {
+          totals.sum += item.price * item.quantity;
+        }
+        return totals;
+      }, { count: 0, sum: 0, hasPriceless: false });
+    }
+
+    function renderCart() {
+      const totals = getTotals();
+      cartCount.textContent = totals.count;
+      cartTotal.textContent = formatTotal(totals);
+      clearCartButton.disabled = totals.count === 0;
+      checkoutCartButton.disabled = totals.count === 0;
+
+      if (totals.count === 0) {
+        cartItems.innerHTML = `
+          <div class="cart-empty">
+            <span>Корзина пока пустая. Добавь понравившуюся картинку из каталога.</span>
+            <img src="собака1.jpg" alt="Собака рядом с пустой корзиной">
+          </div>
+        `;
+        return;
+      }
+
+      cartItems.innerHTML = [...cart.values()].map((item) => `
+        <div class="cart-item">
+            <img src="${item.image}" alt="${item.title}">
+          <div>
+            <strong>${item.title}</strong>
+            <span>${formatItemPrice(item)}</span>
+          </div>
+          <div class="quantity" aria-label="Количество товара ${item.title}">
+            <button type="button" data-action="decrease" data-id="${item.id}" aria-label="Уменьшить количество">−</button>
+            <strong>${item.quantity}</strong>
+            <button type="button" data-action="increase" data-id="${item.id}" aria-label="Увеличить количество">+</button>
+            <button class="remove-item" type="button" data-action="remove" data-id="${item.id}">Убрать</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openCart() {
+      cartOverlay.classList.add("open");
+      cartOverlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("cart-open");
+      closeCartButton.focus();
+    }
+
+    function closeCart() {
+      cartOverlay.classList.remove("open");
+      cartOverlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("cart-open");
+      openCartButton.focus();
+    }
+
+    function openEntryGate() {
+      entryGate.classList.remove("hidden");
+      document.body.classList.add("gate-open");
+      allowGateButton.focus();
+    }
+
+    function closeEntryGate() {
+      entryGate.classList.add("hidden");
+      document.body.classList.remove("gate-open");
+    }
+
+    function startDealCountdown() {
+      const dealTimeZone = "Europe/Prague";
+      const dealHour = 12;
+      const dealMinute = 30;
+
+      function getPragueParts(date) {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+          timeZone: dealTimeZone,
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hourCycle: "h23"
+        }).formatToParts(date);
+
+        return Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, Number(part.value)]));
+      }
+
+      function pragueTimeToUtc(year, month, day, hour, minute) {
+        let utcTime = Date.UTC(year, month - 1, day, hour, minute, 0);
+
+        for (let i = 0; i < 3; i += 1) {
+          const parts = getPragueParts(new Date(utcTime));
+          const pragueAsUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+          const targetAsUtc = Date.UTC(year, month - 1, day, hour, minute, 0);
+          utcTime += targetAsUtc - pragueAsUtc;
+        }
+
+        return utcTime;
+      }
+
+      function getNextDeadline() {
+        const now = new Date();
+        const pragueNow = getPragueParts(now);
+        let deadline = pragueTimeToUtc(pragueNow.year, pragueNow.month, pragueNow.day, dealHour, dealMinute);
+
+        if (deadline <= Date.now()) {
+          deadline = pragueTimeToUtc(pragueNow.year, pragueNow.month, pragueNow.day + 1, dealHour, dealMinute);
+        }
+
+        return deadline;
+      }
+
+      function updateCountdown() {
+        const deadline = getNextDeadline();
+        const remaining = Math.max(0, deadline - Date.now());
+        const hours = Math.floor(remaining / 3600000);
+        const minutes = Math.floor((remaining % 3600000) / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+
+        dealCountdown.textContent = [hours, minutes, seconds]
+          .map((part) => String(part).padStart(2, "0"))
+          .join(":");
+      }
+
+      updateCountdown();
+      window.setInterval(updateCountdown, 1000);
+    }
+
+    document.querySelectorAll(".product, .exclusive-offer").forEach((product) => {
+      const button = product.querySelector(".buy");
+
+      button.addEventListener("click", () => {
+        const item = {
+          id: product.dataset.id,
+          title: product.dataset.title,
+          price: Number(product.dataset.price),
+          priceless: product.dataset.priceless === "true",
+          image: product.dataset.image,
+          limit: Number(product.dataset.limit) || Infinity,
+          quantity: 0
+        };
+        const current = cart.get(item.id) || item;
+
+        if (current.quantity >= current.limit) {
+          button.textContent = "Ліміт 3 штуки";
+          button.classList.add("added");
+
+          window.setTimeout(() => {
+            button.textContent = product.classList.contains("exclusive-offer") ? "В корзину: ЕКСКЛЮЗИВ" : "В корзину";
+            button.classList.remove("added");
+          }, 1100);
+          return;
+        }
+
+        current.quantity += 1;
+        cart.set(item.id, current);
+        button.textContent = "Добавлено";
+        button.classList.add("added");
+        renderCart();
+
+        window.setTimeout(() => {
+          button.textContent = product.classList.contains("exclusive-offer") ? "В корзину: ЕКСКЛЮЗИВ" : "В корзину";
+          button.classList.remove("added");
+        }, 900);
+      });
+    });
+
+    cartItems.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+
+      const item = cart.get(button.dataset.id);
+      if (!item) return;
+
+      if (button.dataset.action === "increase") {
+        item.quantity = Math.min(item.quantity + 1, item.limit);
+      }
+
+      if (button.dataset.action === "decrease") {
+        item.quantity -= 1;
+      }
+
+      if (button.dataset.action === "remove" || item.quantity <= 0) {
+        cart.delete(item.id);
+      }
+
+      renderCart();
+    });
+
+    openCartButton.addEventListener("click", openCart);
+    closeCartButton.addEventListener("click", closeCart);
+    cartOverlay.addEventListener("click", (event) => {
+      if (event.target === cartOverlay) closeCart();
+    });
+    clearCartButton.addEventListener("click", () => {
+      cart.clear();
+      renderCart();
+    });
+    checkoutCartButton.addEventListener("click", () => {
+      if (getTotals().count === 0) return;
+      window.location.href = "https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D1%88%D0%BA%D0%B0";
+    });
+    allowGateButton.addEventListener("click", closeEntryGate);
+    denyGateButton.addEventListener("click", () => {
+      gateDenied.textContent = "Без любові до мацурів вхід закритий.";
+      denyGateButton.blur();
+      allowGateButton.focus();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && cartOverlay.classList.contains("open")) {
+        closeCart();
+      }
+    });
+
+    renderCart();
+    startDealCountdown();
+    openEntryGate();
+  </script>
+</body>
+</html>
