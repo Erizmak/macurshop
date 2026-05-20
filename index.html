@@ -426,6 +426,15 @@
       background: var(--ink);
     }
 
+    .buy:disabled,
+    .buy.sold-out {
+      background: var(--muted);
+      cursor: not-allowed;
+      opacity: 0.82;
+      transform: none;
+      box-shadow: none;
+    }
+
     body.cart-open {
       overflow: hidden;
     }
@@ -725,16 +734,16 @@
           <a class="button secondary" href="#why">Как это работает</a>
         </div>
       </div>
-      <div class="hero-art exclusive-offer" aria-label="Эксклюзивное фото кота" data-id="cat-7" data-title="ЕКСКЛЮЗИВ: Мацур на стрісі" data-price="0" data-priceless="true" data-image="кот7.jpg" data-limit="3">
+      <div class="hero-art exclusive-offer" aria-label="Эксклюзивное фото Аниты" data-id="cat-7" data-title="ЕКСКЛЮЗИВ: Аніта, королева мацурів" data-price="0" data-priceless="true" data-image="anita.jpg" data-limit="1" data-sold-out="true">
         <div class="deal-timer">
           <strong>УСПІЙ ОСТАННІЙ ШАНС!</strong>
           <span id="dealCountdown">24:00:00</span>
         </div>
-        <img src="кот7.jpg" alt="Мацур на стрісі">
+        <img src="anita.jpg" alt="Аніта, королева мацурів">
         <div class="ribbon">
-          <strong>ЕКСКЛЮЗИВ: Мацур на стрісі</strong>
-          <span>Ліміт: 3 штуки</span>
-          <button class="buy" type="button">В корзину: ЕКСКЛЮЗИВ</button>
+          <strong>ЕКСКЛЮЗИВ: Аніта, королева мацурів</strong>
+          <span>Ліміт: 1 штука · вже розпродано</span>
+          <button class="buy sold-out" type="button" disabled>РОЗПРОДАНО</button>
         </div>
       </div>
     </section>
@@ -783,15 +792,15 @@
       </div>
 
       <div class="catalog-category">
-        <h3 class="category-title">Мачата Софійки</h3>
+        <h3 class="category-title">Кушницькі Мацури</h3>
         <div class="grid">
           <article class="product" data-id="cat-4" data-title="Кот 4" data-price="0" data-priceless="true" data-image="кот4.jpg">
             <div class="picture">
               <img src="кот4.jpg" alt="Кот 4">
             </div>
             <div class="product-body">
-              <div class="meta"><span>Кот 4</span><span>БЕЗЦІННО!!!</span></div>
-              <p>Ніжне мачатко Софійки для тихих ранків і теплих обіймів.</p>
+              <div class="meta"><span>Кот 4</span><span>ХЗ</span></div>
+              <p>Ніжний кушницький мацур для тихих ранків і теплих обіймів.</p>
               <button class="buy" type="button">В корзину</button>
             </div>
           </article>
@@ -801,8 +810,8 @@
               <img src="кот5.jpg" alt="Кот 5">
             </div>
             <div class="product-body">
-              <div class="meta"><span>Кот 5</span><span>БЕЗЦІННО!!!</span></div>
-              <p>Допитливе мачатко Софійки, яке уважно стежить за всім навколо.</p>
+              <div class="meta"><span>Кот 5</span><span>ХЗ</span></div>
+              <p>Допитливий кушницький мацур, який уважно стежить за всім навколо.</p>
               <button class="buy" type="button">В корзину</button>
             </div>
           </article>
@@ -812,8 +821,8 @@
               <img src="кот6.jpg" alt="Кот 6">
             </div>
             <div class="product-body">
-              <div class="meta"><span>Кот 6</span><span>БЕЗЦІННО!!!</span></div>
-              <p>Сміливе мачатко Софійки з характером маленького начальника.</p>
+              <div class="meta"><span>Кот 6</span><span>ХЗ</span></div>
+              <p>Сміливий кушницький мацур з характером маленького начальника.</p>
               <button class="buy" type="button">В корзину</button>
             </div>
           </article>
@@ -890,13 +899,13 @@
     }
 
     function formatItemPrice(item) {
-      if (item.priceless) return "БЕЗЦІННО!!!";
+      if (item.priceless) return "ХЗ";
       return `${formatPrice(item.price)} × ${item.quantity} = ${formatPrice(item.price * item.quantity)}`;
     }
 
     function formatTotal(totals) {
-      if (totals.sum > 0 && totals.hasPriceless) return `БЕЗЦІННО!!! + ${formatPrice(totals.sum)}`;
-      if (totals.hasPriceless) return "БЕЗЦІННО!!!";
+      if (totals.sum > 0 && totals.hasPriceless) return `ХЗ + ${formatPrice(totals.sum)}`;
+      if (totals.hasPriceless) return "ХЗ";
       return formatPrice(totals.sum);
     }
 
@@ -1036,6 +1045,8 @@
       const button = product.querySelector(".buy");
 
       button.addEventListener("click", () => {
+        if (product.dataset.soldOut === "true") return;
+
         const item = {
           id: product.dataset.id,
           title: product.dataset.title,
@@ -1048,7 +1059,7 @@
         const current = cart.get(item.id) || item;
 
         if (current.quantity >= current.limit) {
-          button.textContent = "Ліміт 3 штуки";
+          button.textContent = `Ліміт ${current.limit} штука`;
           button.classList.add("added");
 
           window.setTimeout(() => {
@@ -1124,3 +1135,4 @@
   </script>
 </body>
 </html>
+
